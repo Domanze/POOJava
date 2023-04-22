@@ -1,13 +1,14 @@
 
 package com.mycompany.poojava;
 
-import java.sql.Connection;
+import java.sql.*;
 import java.sql.DriverManager;
 import javax.swing.JOptionPane;
 
 
 public class CConnection {
-    Connection connect = null;
+    Connection cn = null;
+    Statement st = null;
     
     String user = "useradmin";
     String password = "root";
@@ -15,17 +16,17 @@ public class CConnection {
     String ip = "localhost";
     String port = "1433";
     
-    String cadena = "jdbc:sqlserver://"+ip+":"+port+";"+"databaseName="+db;
+    String url = "jdbc:sqlserver://"+ip+":"+port+";"+"databaseName="+db;
     
-    public Connection establishConnetion(){
+    public Statement establishConnection(){
     
         try{
-        connect = DriverManager.getConnection(cadena,user,password);
-        JOptionPane.showMessageDialog(null,"Conexion a la base de datos exitosa");
+        cn = DriverManager.getConnection(url,user,password);
+        st = cn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
                 }
-        catch (Exception e) {
-            JOptionPane.showMessageDialog(null,"Error al conectar a la base de datos, error: "+ e.toString());
+        catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,e);
         }
-        return connect;
+        return st;
     }
 }

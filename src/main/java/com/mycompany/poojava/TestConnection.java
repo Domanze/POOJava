@@ -1,9 +1,8 @@
-
 package com.mycompany.poojava;
 
-public class main {
+public class TestConnection {
     public static void main(String[] args){
         CConnection objconnection = new CConnection();
-        objconnection.establishConnetion();
+        objconnection.establishConnection();
     }
 }
