@@ -150,14 +150,14 @@ public class Login extends javax.swing.JFrame {
             CConnection connect = new CConnection();
             Statement st = connect.establishConnection();
             try{
-                ResultSet rs =st.executeQuery("SELECT*FROM Usuarios Where Nombre='"+user+"and Contraseña="+pass+"'");
+                ResultSet rs = st.executeQuery("SELECT*FROM Usuarios WHERE Nombre='"+ user +"' and Contraseña='"+ pass +"'");
                 rs.last();
                 int found = rs.getRow();
                 if(found ==1){
-                JOptionPane.showMessageDialog(null,"Se ha podido acceder correctamente");
-                Menu menu = new Menu();
-                menu.setVisible(true);
-                hide();
+                    JOptionPane.showMessageDialog(null,"Se ha podido acceder correctamente");
+                    Menu menu = new Menu();
+                    menu.setVisible(true);
+                    hide();
                 }
                 else{
                 txtUser.setText("");

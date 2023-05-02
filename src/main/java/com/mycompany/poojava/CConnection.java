@@ -16,7 +16,7 @@ public class CConnection {
     String ip = "localhost";
     String port = "1433";
     
-    String url = "jdbc:sqlserver://"+ip+":"+port+";"+"databaseName="+db;
+    String url = "jdbc:sqlserver://"+ip+":"+port+";"+"databaseName="+db+";";
     
     public Statement establishConnection(){
     
@@ -29,4 +29,16 @@ public class CConnection {
         }
         return st;
     }
-}
+    
+    public Connection establishConnectionCN(){
+        try{
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            cn = DriverManager.getConnection(url,user,password);
+            
+        
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null,ex);
+        }return cn;
+        }
+    }
+
