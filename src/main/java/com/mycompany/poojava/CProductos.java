@@ -4,18 +4,16 @@
  */
 package com.mycompany.poojava;
 
+import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author carna
- */
 public class CProductos {
-    public void mostrarProductos(JTable paramTablaProductos){
+    public void MostrarProductos(JTable paramTablaProductos){
     CConnection cn = new CConnection();
     DefaultTableModel model = new DefaultTableModel();
     
@@ -50,10 +48,86 @@ public class CProductos {
          model.addRow(datosProd);
          }
          paramTablaProductos.setModel(model);
-    }catch(Exception ex){
-        JOptionPane.showMessageDialog(null,"Error:"+ ex.toString());
+    }catch(Exception e){
+        JOptionPane.showMessageDialog(null,"Error:"+ e.toString());
     
     }
+    
+    }
+    
+    public void SeleccionarProductos(JTable paramTablaProductos, JTextField paramID, JTextField paramCategoria, JTextField paramNombre, JTextField paramPrecio, JTextField paramDescripcion, JTextField paramEspecificaciones){
+    try{
+        int nrow = paramTablaProductos.getSelectedRow();
+        if (nrow>=0){
+        paramID.setText(paramTablaProductos.getValueAt(nrow, 0).toString());
+        paramCategoria.setText(paramTablaProductos.getValueAt(nrow, 1).toString());
+        paramNombre.setText(paramTablaProductos.getValueAt(nrow, 2).toString());
+        paramPrecio.setText(paramTablaProductos.getValueAt(nrow, 3).toString());
+        paramDescripcion.setText(paramTablaProductos.getValueAt(nrow, 4).toString());
+        paramEspecificaciones.setText(paramTablaProductos.getValueAt(nrow, 5).toString());
+        }else{
+        JOptionPane.showMessageDialog(null,"Error, no se pudo seleccionar");
+        }
+    }catch(Exception e){
+        JOptionPane.showMessageDialog(null,"Error:"+ e.toString());
+    }
+    
+    }
+    
+    public void GuardarProductos(JTextField paramCategoria, JTextField paramNombre, JTextField paramPrecio, JTextField paramDescripcion, JTextField paramEspecificaciones){
+        CConnection cn = new CConnection();
+        String sqlquery = "INSERT INTO Productos(ID_Categoria,Nombre_Producto,Precio_Producto,Descripcion,Especificaciones) VALUES (?,?,?,?,?);";
+        try{
+            CallableStatement cs = cn.establishConnectionCN().prepareCall(sqlquery);
+            cs.setInt(1,Integer.parseInt(paramCategoria.getText()));
+            cs.setString(2,paramNombre.getText());
+            cs.setFloat(3,Float.parseFloat(paramPrecio.getText()));
+            cs.setString(4,paramDescripcion.getText());
+            cs.setString(5,paramEspecificaciones.getText());
+            
+            cs.execute();
+            JOptionPane.showMessageDialog(null,"Se guardo correctamente");
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null,"Error:"+ e.toString());
+        }
+        
+    }
+    
+    public void ModificarProductos(JTextField paramID, JTextField paramCategoria, JTextField paramNombre, JTextField paramPrecio, JTextField paramDescripcion, JTextField paramEspecificaciones){
+        CConnection cn = new CConnection();
+        String sqlquery = "UPDATE Productos SET Productos.ID_Categoria=?, Productos.Nombre_Producto=?, Productos.Precio_Producto=?, Productos.Descripcion=?, Productos.Especificaciones=? WHERE Productos.ID_Producto=?";
+        
+        try{
+            CallableStatement cs = cn.establishConnectionCN().prepareCall(sqlquery);
+            cs.setInt(1,Integer.parseInt(paramCategoria.getText()));
+            cs.setString(2,paramNombre.getText());
+            cs.setFloat(3,Float.parseFloat(paramPrecio.getText()));
+            cs.setString(4,paramDescripcion.getText());
+            cs.setString(5,paramEspecificaciones.getText());
+            cs.setInt(6,Integer.parseInt(paramID.getText()));
+            cs.execute();
+            
+            JOptionPane.showMessageDialog(null,"Se modifico correctamente");
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null,"Error:"+ e.toString());
+        }
+    }
+    
+    public void EliminarProductos(JTextField paramID){
+        CConnection cn = new CConnection();
+        String sqlquery = "DELETE FROM Productos WHERE Productos.ID_Producto=?";
+        
+        try{
+            CallableStatement cs = cn.establishConnectionCN().prepareCall(sqlquery);
+            cs.setInt(1,Integer.parseInt(paramID.getText()));
+            cs.execute();
+            JOptionPane.showMessageDialog(null,"Se elimino correctamente");
+            
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"Error:"+ e.toString());
+        }
+    
     
     }
     
